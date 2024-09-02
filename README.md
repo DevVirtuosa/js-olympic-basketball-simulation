@@ -2,7 +2,7 @@
 <br>
 ---------------------
 <br>
-** Tech Used**: <br>
+** Tech Used:** <br>
 - _JavaScript<br>
 - Node.js<br>
 - Git_
