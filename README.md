@@ -2,13 +2,15 @@
 <br>
 ---------------------
 <br>
-** Tech Used**: <br>
-_JavaScript<br>
-Node.js<br>
-Git_<br>
+** Tech Used:** <br>
+- _JavaScript<br>
+- Node.js<br>
+- Git_
 <br>
+--------------------
 <br>
 Dependencies used: nodemon
 <br>
+--------------------
 <br>
-netlify link: <link>
+render link: https://js-olympic-basketball-simulation.onrender.com
