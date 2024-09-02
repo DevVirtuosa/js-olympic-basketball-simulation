@@ -1,6 +1,3 @@
-// const groups = require('./data/groups.json');
-
-// prosiliral sam json objekat
 const groups = {
   A: [
     {
@@ -10,6 +7,9 @@ const groups = {
       points: 0,
       scored: 0,
       conceded: 0,
+      wins: 0,
+      defeats: 0,
+      "plus-minus": 0,
     },
     {
       Team: "Australija",
@@ -18,6 +18,9 @@ const groups = {
       points: 0,
       scored: 0,
       conceded: 0,
+      wins: 0,
+      defeats: 0,
+      "plus-minus": 0,
     },
     {
       Team: "Grčka",
@@ -26,6 +29,9 @@ const groups = {
       points: 0,
       scored: 0,
       conceded: 0,
+      wins: 0,
+      defeats: 0,
+      "plus-minus": 0,
     },
     {
       Team: "Španija",
@@ -34,6 +40,9 @@ const groups = {
       points: 0,
       scored: 0,
       conceded: 0,
+      wins: 0,
+      defeats: 0,
+      "plus-minus": 0,
     },
   ],
   B: [
@@ -44,6 +53,9 @@ const groups = {
       points: 0,
       scored: 0,
       conceded: 0,
+      wins: 0,
+      defeats: 0,
+      "plus-minus": 0,
     },
     {
       Team: "Francuska",
@@ -52,6 +64,9 @@ const groups = {
       points: 0,
       scored: 0,
       conceded: 0,
+      wins: 0,
+      defeats: 0,
+      "plus-minus": 0,
     },
     {
       Team: "Brazil",
@@ -60,6 +75,9 @@ const groups = {
       points: 0,
       scored: 0,
       conceded: 0,
+      wins: 0,
+      defeats: 0,
+      "plus-minus": 0,
     },
     {
       Team: "Japan",
@@ -68,6 +86,9 @@ const groups = {
       points: 0,
       scored: 0,
       conceded: 0,
+      wins: 0,
+      defeats: 0,
+      "plus-minus": 0,
     },
   ],
   C: [
@@ -78,6 +99,9 @@ const groups = {
       points: 0,
       scored: 0,
       conceded: 0,
+      wins: 0,
+      defeats: 0,
+      "plus-minus": 0,
     },
     {
       Team: "Srbija",
@@ -86,6 +110,9 @@ const groups = {
       points: 0,
       scored: 0,
       conceded: 0,
+      wins: 0,
+      defeats: 0,
+      "plus-minus": 0,
     },
     {
       Team: "Južni Sudan",
@@ -94,6 +121,9 @@ const groups = {
       points: 0,
       scored: 0,
       conceded: 0,
+      wins: 0,
+      defeats: 0,
+      "plus-minus": 0,
     },
     {
       Team: "Puerto Riko",
@@ -102,11 +132,15 @@ const groups = {
       points: 0,
       scored: 0,
       conceded: 0,
+      wins: 0,
+      defeats: 0,
+      "plus-minus": 0,
     },
   ],
 };
 
-// Funkcija za simulaciju meča
+console.log("----------------POCETAK TURNIRA----------------");
+
 function simulateMatch(team1, team2) {
   const rankDiff = team2.FIBARanking - team1.FIBARanking;
   const team1Advantage = Math.random() * rankDiff;
@@ -118,20 +152,27 @@ function simulateMatch(team1, team2) {
   team2.scored += team2Score;
   team2.conceded += team1Score;
 
+  const scoreDiff = team1Score - team2Score;
+  team1["plus-minus"] += scoreDiff;
+  team2["plus-minus"] -= scoreDiff;
+
   if (team1Score > team2Score) {
     team1.points += 2;
+    team1.wins += 1;
     team2.points += 1;
+    team2.defeats += 1;
   } else {
     team1.points += 1;
+    team1.defeats += 1;
     team2.points += 2;
+    team2.wins += 1;
   }
 
-  return `${team1.Team} ${team1Score}:${team2Score} ${team2.Team}`;
+  return `${team1.Team} - ${team2.Team} (${team1Score}:${team2Score})`;
 }
 
-console.log("\n----------------GRUPNA FAZA----------------\n");
+console.log("\n\n----------------GRUPNA FAZA----------------\n");
 
-// Funkcija za simulaciju svih mečeva u grupi
 function simulateGroup(group) {
   const results = [];
   for (let i = 0; i < group.length; i++) {
@@ -142,10 +183,12 @@ function simulateGroup(group) {
   return results;
 }
 
-// Funkcija za rangiranje timova unutar grupe
 function rankTeams(group) {
   return group.sort((a, b) => {
+    if (b.wins !== a.wins) return b.wins - a.wins;
     if (b.points !== a.points) return b.points - a.points;
+    if (b["plus-minus"] !== a["plus-minus"])
+      return b["plus-minus"] - a["plus-minus"];
     const goalDifferenceA = a.scored - a.conceded;
     const goalDifferenceB = b.scored - b.conceded;
     if (goalDifferenceB !== goalDifferenceA)
@@ -154,9 +197,6 @@ function rankTeams(group) {
   });
 }
 
-/// ------------- GRUPNA FAZA ------------- ///
-
-// Simuliraj sve grupe i rangiraj timove
 const firstPlaced = [];
 const secondPlaced = [];
 const thirdPlaced = [];
@@ -165,73 +205,63 @@ for (let group in groups) {
   console.log(`Grupa ${group}:`);
   const results = simulateGroup(groups[group]);
   results.forEach((result) => console.log(` ${result}`));
+  console.log("\n-----------\n");
+}
 
+console.log("\n--------------------------------------");
+
+for (let group in groups) {
   const rankedTeams = rankTeams(groups[group]);
-
   console.log(`\nKonačno rangiranje u Grupi ${group}:`);
   rankedTeams.forEach((team, index) => {
     console.log(
-      `${index + 1}. ${team.Team} - Bodovi: ${team.points}, Dato: ${
+      `${index + 1}. ${team.Team} - Pobede: ${team.wins} / Porazi: ${
+        team.defeats
+      } / Bodovi: ${team.points} / Postignuti kosevi: ${
         team.scored
-      }, Primljeno: ${team.conceded}`
+      } / Primljeni kosevi: ${team.conceded} / Plus-Minus: ${
+        team["plus-minus"]
+      }`
     );
   });
 
-  console.log("\n--------------------------------------\n");
-
-  // Čuvanje timova na osnovu njihove pozicije
   firstPlaced.push(rankedTeams[0]);
   secondPlaced.push(rankedTeams[1]);
   thirdPlaced.push(rankedTeams[2]);
 }
 
-// Funkcija za rangiranje timova iz svih grupa
-function rankAcrossGroups(teams) {
+function rankOverall(teams) {
   return teams.sort((a, b) => {
     if (b.points !== a.points) return b.points - a.points;
-    const goalDifferenceA = a.scored - a.conceded;
-    const goalDifferenceB = b.scored - b.conceded;
-    if (goalDifferenceB !== goalDifferenceA)
-      return goalDifferenceB - goalDifferenceA;
+    if (b["plus-minus"] !== a["plus-minus"])
+      return b["plus-minus"] - a["plus-minus"];
     return b.scored - a.scored;
   });
 }
 
-// Rangiraj prvoplasirane, drugoplasirane i trećeplasirane timove globalno
-const rankedFirstPlaced = rankAcrossGroups(firstPlaced);
-const rankedSecondPlaced = rankAcrossGroups(secondPlaced);
-const rankedThirdPlaced = rankAcrossGroups(thirdPlaced);
+const rankedFirstPlaced = rankOverall(firstPlaced);
+const rankedSecondPlaced = rankOverall(secondPlaced);
+const rankedThirdPlaced = rankOverall(thirdPlaced);
 
-// Kombinuj sve rangirane timove u konačno globalno rangiranje
-const finalRanking = [
+const overallRanking = [
   ...rankedFirstPlaced,
   ...rankedSecondPlaced,
   ...rankedThirdPlaced,
 ];
 
-console.log(
-  "\n----------------KONAČNO GLOBALNO RANGIRANJE TIMOVA----------------\n"
-);
-
-// Prikaz konačnog globalnog rangiranja
-console.log("\nKonačno Globalno Rangiranje (1-9):");
-finalRanking.forEach((team, index) => {
-  console.log(
-    `${index + 1}. ${team.Team} - Bodovi: ${team.points}, Dato: ${
-      team.scored
-    }, Primljeno: ${team.conceded}`
-  );
+console.log("\n------------ KONAČNO RANGIRANJE ------------\n");
+overallRanking.forEach((team, index) => {
+  console.log(`${index + 1}. ${team.Team} - Rang: ${index + 1}`);
 });
 
-console.log("\n\n----------------8 NAJBOLJIH TIMOVA----------------\n\n");
+const advancingTeams = overallRanking.slice(0, 8);
+const eliminatedTeam = overallRanking[8];
 
-// Prvih 8 timova prolaze u eliminacionu fazu
-const top8Teams = finalRanking.slice(0, 8);
-console.log("\nTimovi koji prolaze u eliminacionu fazu:");
-top8Teams.forEach((team, index) => {
+console.log(
+  "\n------------ TIMOVI KOJI PROLAZE U ELIMINACIONU FAZU ------------\n"
+);
+advancingTeams.forEach((team, index) => {
   console.log(`${index + 1}. ${team.Team}`);
 });
 
-////// ------------------ ELIMINACIONA FAZA ------------------ //////
-
-/// Četvrtfinala ///
+console.log(`\nEkipa koja ne nastavlja takmičenje: ${eliminatedTeam.Team}`);
