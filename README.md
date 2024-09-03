@@ -13,4 +13,4 @@ Dependencies used: nodemon
 <br>
 --------------------
 <br>
-render link: https://js-olympic-basketball-simulation.onrender.com
+render link: https://js-olympic-basketball-simulation.onrender.com/simulate-tournament
