@@ -14,3 +14,5 @@ Dependencies used: nodemon
 --------------------
 <br>
 render link: https://js-olympic-basketball-simulation.onrender.com/simulate-tournament
+
+Render server is free and it goes to sleep after some time, please wait some time for build and deploy when hitting the link.
