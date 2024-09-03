@@ -415,6 +415,8 @@ function playBronzeMatch(team1, team2) {
   return simulateMatch(team1, team2);
 }
 
+// Ostatak vašeg koda...
+
 // Simulacija četvrtfinala
 console.log("\nČetvrtfinale:");
 const quarterFinalResults1 = playEliminationRound(quarterFinalPairs1);
@@ -443,6 +445,11 @@ const bronzeMatchTeams = semiFinalTeams.filter(
   (team) => !finalists.includes(team)
 );
 
+// Simulacija finala
+console.log("\nFinale:");
+const finalResult = simulateMatch(finalists[0], finalists[1]);
+console.log(`    ${finalResult}`);
+
 // Simulacija utakmice za treće mesto
 console.log("\nUtakmica za treće mesto:");
 const bronzeMatchResult = playBronzeMatch(
@@ -451,22 +458,28 @@ const bronzeMatchResult = playBronzeMatch(
 );
 console.log(`    ${bronzeMatchResult}`);
 
-// Simulacija finala
-console.log("\nFinale:");
-const finalResult = simulateMatch(finalists[0], finalists[1]);
-console.log(`    ${finalResult}`);
-
 // Prikaz osvojenih medalja
 console.log("\nMedalje:");
-const finalWinner = finalResult.includes(finalists[0].Team)
-  ? finalists[0].Team
-  : finalists[1].Team;
-const finalLoser = finalResult.includes(finalists[0].Team)
-  ? finalists[1].Team
-  : finalists[0].Team;
-const bronzeWinner = bronzeMatchResult.includes(bronzeMatchTeams[0].Team)
-  ? bronzeMatchTeams[0].Team
-  : bronzeMatchTeams[1].Team;
+
+// Ekstrakcija rezultata finala
+const finalScores = finalResult.match(/\((\d+):(\d+)\)$/);
+const finalScoreTeam1 = parseInt(finalScores[1]);
+const finalScoreTeam2 = parseInt(finalScores[2]);
+
+// Ekstrakcija rezultata utakmice za treće mesto
+const bronzeScores = bronzeMatchResult.match(/\((\d+):(\d+)\)$/);
+const bronzeScoreTeam1 = parseInt(bronzeScores[1]);
+const bronzeScoreTeam2 = parseInt(bronzeScores[2]);
+
+// Određivanje osvajača medalja
+const finalWinner =
+  finalScoreTeam1 > finalScoreTeam2 ? finalists[0].Team : finalists[1].Team;
+const finalLoser =
+  finalScoreTeam1 > finalScoreTeam2 ? finalists[1].Team : finalists[0].Team;
+const bronzeWinner =
+  bronzeScoreTeam1 > bronzeScoreTeam2
+    ? bronzeMatchTeams[0].Team
+    : bronzeMatchTeams[1].Team;
 
 console.log(`    1. ${finalWinner}`);
 console.log(`    2. ${finalLoser}`);
@@ -476,3 +489,16 @@ console.log("\n\n----------------KRAJ TURNIRA----------------");
 console.log("----------------KRAJ TURNIRA----------------");
 console.log("----------------KRAJ TURNIRA----------------");
 console.log("----------------KRAJ TURNIRA----------------");
+
+module.exports = {
+  groups,
+  simulateGroup,
+  rankTeams,
+  simulateMatch,
+  rankOverall,
+  playEliminationRound,
+  createQuarterFinalPairs,
+  createSemiFinalPairs,
+  generateGroupMatchups,
+  playBronzeMatch,
+};
