@@ -415,8 +415,6 @@ function playBronzeMatch(team1, team2) {
   return simulateMatch(team1, team2);
 }
 
-// Ostatak vašeg koda...
-
 // Simulacija četvrtfinala
 console.log("\nČetvrtfinale:");
 const quarterFinalResults1 = playEliminationRound(quarterFinalPairs1);
